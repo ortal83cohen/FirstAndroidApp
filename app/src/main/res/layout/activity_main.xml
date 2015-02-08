@@ -13,6 +13,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/textView" />
 
+
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,5 +36,11 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:contentDescription="@string/imag1" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/the_list_view"
+        />
 
 </RelativeLayout>

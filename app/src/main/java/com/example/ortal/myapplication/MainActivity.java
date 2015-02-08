@@ -13,8 +13,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -28,9 +32,24 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        RelativeLayout wvContent = (RelativeLayout) findViewById(R.id.ortal);
-//        ColorDrawable bg1 = (ColorDrawable) getResources().getDrawable(R.drawable.ortal);
-//        wvContent.setBackground(bg1);
+        String[] list = {"hi","hi2","hi3","hi4","hi5"};
+
+        ListView list_view = (ListView)findViewById(R.id.the_list_view);
+        ListAdapter list_adapter  = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1,list);
+        list_view.setAdapter(list_adapter);
+
+        list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                String tvShowPicked = "You selected " +
+                        String.valueOf(adapterView.getItemAtPosition(i));
+
+                Toast.makeText(MainActivity.this, tvShowPicked, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
 
         final Button button = (Button) findViewById(R.id.button1);
         button.setOnClickListener(new View.OnClickListener() {
@@ -40,11 +59,6 @@ public class MainActivity extends Activity {
                 RelativeLayout wvContent = (RelativeLayout) findViewById(R.id.ortal);
                 try {
                     wvContent.setBackgroundColor(0);
-                    button.setText("Again");
-//                    Bitmap bm;
-//                    bm = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(filepath),100, 100, true);
-//                    ImageView mPicture = new ImageView(context);
-//                    mPicture.setImageBitmap(bm);
 
                     Drawable bg1 = getResources().getDrawable(R.drawable.ortal);
                     Drawable bg =  getResources().getDrawable(R.drawable.pic2);
@@ -57,17 +71,10 @@ public class MainActivity extends Activity {
                     }else{
                         background1.setBackground(bg1);
                     }
-
-//                bg_color=R.drawable.pix2;
                 } catch (Exception e) {
                     Toast.makeText(getBaseContext(),e.getMessage(),Toast.LENGTH_LONG).show();
                 }
 
-
-                // Perform action on click
-                Random random = new Random();
-//                v.animate().cancel();
-//                v.animate().start();
                 v.animate().rotationX((float) 1123.1231);
 
             }
