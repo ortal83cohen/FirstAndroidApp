@@ -1,18 +1,12 @@
 package com.example.ortal.myapplication;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Shader;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -22,21 +16,24 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import java.util.Random;
-
 
 public class MainActivity extends Activity {
+
+    static final String BACKGROUND = "background";
+
+    static int BACKGROUND_VALUE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String[] list = {"hi","hi2","hi3","hi4","hi5"};
+        String[] list = {"hi", "hi2", "hi3", "hi4", "hi5"};
 
-        ListView list_view = (ListView)findViewById(R.id.the_list_view);
-        ListAdapter list_adapter  = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1,list);
-        list_view.setAdapter(list_adapter);
+        ListView list_view = (ListView) findViewById(R.id.the_list_view);
+        ListAdapter listAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_expandable_list_item_1, list);
+        list_view.setAdapter(listAdapter);
 
         list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -49,7 +46,13 @@ public class MainActivity extends Activity {
 
             }
         });
+        if (savedInstanceState != null) {
+            ImageView background = (ImageView) findViewById(R.id.imageView2);
+            BACKGROUND_VALUE = savedInstanceState.getInt(BACKGROUND);
+            Drawable bg = getResources().getDrawable(BACKGROUND_VALUE);
 
+            background.setBackground(bg);
+        }
 
         final Button button = (Button) findViewById(R.id.button1);
         button.setOnClickListener(new View.OnClickListener() {
@@ -59,20 +62,19 @@ public class MainActivity extends Activity {
                 RelativeLayout wvContent = (RelativeLayout) findViewById(R.id.ortal);
                 try {
                     wvContent.setBackgroundColor(0);
+                    ImageView background = (ImageView) findViewById(R.id.imageView2);
 
-                    Drawable bg1 = getResources().getDrawable(R.drawable.ortal);
-                    Drawable bg =  getResources().getDrawable(R.drawable.pic2);
-                    Drawable background = wvContent.getBackground();
-                    ImageView background1 = (ImageView) findViewById(R.id.imageView2);
+                    Drawable bg;
+                    if (background.getBackground() == null || BACKGROUND_VALUE != R.drawable.pic2) {
+                        BACKGROUND_VALUE = R.drawable.pic2;
 
-
-                    if(background1.getBackground()== null || background1.getBackground().getConstantState().equals((bg1.getConstantState()))){
-                        background1.setBackground(bg);
-                    }else{
-                        background1.setBackground(bg1);
+                    } else {
+                        BACKGROUND_VALUE = R.drawable.ortal;
                     }
+                    bg = getResources().getDrawable(BACKGROUND_VALUE);
+                    background.setBackground(bg);
                 } catch (Exception e) {
-                    Toast.makeText(getBaseContext(),e.getMessage(),Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                 }
 
                 v.animate().rotationX((float) 1123.1231);
@@ -80,8 +82,18 @@ public class MainActivity extends Activity {
             }
 
         });
+
+
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        // Save the user's current game state
+        outState.putInt(BACKGROUND, BACKGROUND_VALUE);
+
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(outState);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -103,5 +115,13 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onGetClick(View view) {
+        Intent secondScreen = new Intent(this, SecondScreen.class);
+
+        secondScreen.putExtra("test", "test1");
+        final int result = 1;
+        startActivityForResult(secondScreen, result);
     }
 }
